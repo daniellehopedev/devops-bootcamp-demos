@@ -10,6 +10,12 @@ Docker, Node.js, MongoDB, MongoExpress
 - Create Dockerfile for NodeJS application and build Docker image
 - Run NodeJS application in Docker container and connect to MongoDB database container locally
 - Run MongoExpress container as a UI of the MongoDB database
+
+### Nodejs Demo App Info
+This demo app shows a simple user profile app set up using 
+- index.html with pure js and css styles
+- nodejs backend with express module
+- mongodb for data storage
 ---
 ### Create a Network for connection between MongoDB and MongoExpress containers
 *NOT MANDATORY TO CREATE A NETWORK, CAN USE DEFAULT DOCKER NETWORK*

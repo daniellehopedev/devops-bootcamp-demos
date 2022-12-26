@@ -1,0 +1,20 @@
+version: '2' # version of docker-compose
+services: # containers to run
+  mongodb:
+    image: mongo # docker image name
+    ports:
+      - 27017:27017
+    environment:  # -e variables
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8080:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    depends_on:
+      - mongodb
