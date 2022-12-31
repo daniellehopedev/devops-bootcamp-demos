@@ -47,7 +47,7 @@ This demo app shows a simple user profile app set up using
 
 ### Create Dockerfile for NodeJS app
 1. create a file, 'Dockerfile' in your project's root directory
-    - sample file: https://github.com/daniellehopedev/devops-bootcamp-demos/blob/feature/containers-with-docker/module-7-demos/docker-local-development-demo/developing-with-docker/Dockerfile
+    - sample file: https://github.com/daniellehopedev/devops-bootcamp-demos/blob/main/module-7-demos/docker-local-development-demo/developing-with-docker/Dockerfile
 2. build the Docker image based on the Dockerfile
  - cmd: `docker build -t [name of image]:[version tag] [directory location]`
     - example: `docker build -t my-node-app:1.0 .` (the dot (.) is the current directory, should also be where the Dockerfile is located)
