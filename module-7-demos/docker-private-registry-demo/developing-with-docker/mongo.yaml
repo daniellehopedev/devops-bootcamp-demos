@@ -1,0 +1,31 @@
+version: '3'
+services:
+  node-app:
+    image: 495866492328.dkr.ecr.us-east-2.amazonaws.com/node-app:2.0
+    ports:
+      - 3000:3000
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo-data:/data/db  # host-volume-name:/path-inside-of-the-container
+      # /data/db is where mongodb stores it's data
+      # when the container start up, all of the data on the host volume will be replicated to the container
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8080:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    depends_on:
+      - mongodb
+volumes:
+  mongo-data:
+    driver: local
