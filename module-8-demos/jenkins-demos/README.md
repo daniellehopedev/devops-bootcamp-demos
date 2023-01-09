@@ -65,13 +65,8 @@ FYI: Jenkins Plugins - https://plugins.jenkins.io/
     - check the linux distro with `cat /etc/issue`, used for a script you need to setup nodejs
     - install curl (if it's not already)
         - `apt update` > `apt install curl`
-    - download setup script
-        - `curl -sL <nodesource url> -o nodesource_setup.sh`
-        - get NodeSource url from : https://github.com/nodesource/distributions
-    - run the setup script
-        - `bash nodesource_setup.sh`
-    - install nodejs
-        - `apt install nodejs`
+    - download setup script for NodeSource
+        - get installation instructions from : https://github.com/nodesource/distributions
 
 ### Make Docker Available on the Jenkins Server
 1. shutdown the current running jenkins container
@@ -85,9 +80,90 @@ FYI: Jenkins Plugins - https://plugins.jenkins.io/
     - execute `chmod 666 /var/run/docker.sock`
         - will add read/write permissions for everyone
 
+NOTE: depending on the version of Ubuntu you are using for your droplet, you may encounter an issue with the docker installation. If you can't run `docker` or you see any error related to "GLIBC". Follow the steps below to help resolve your issue:
+
+1. create a Dockerfile on the server
+```
+FROM jenkins/jenkins:lts
+RUN curl -sSL https://get.docker.com/ | sh
+USER jenkins
+```
+2. tag and build a new jenkins image based on the Dockerfile
+`docker build -t jenkins-with-docker .`
+3. run jenkins container with the new image, without the "(which docker)" volume
+
 ### Create Jenkins Credentials for a Git Repository
+1. in Jenkins UI on the dashboard, click on Manage Jenkins
+2. click on Manage Credentials
+3. in the table, under domains, click (global)
+4. click Add Credentials button
+    - select 'Username with Password'
+    - if setting up with username and password
+        - username = github/gitlab username
+        - password = github/gitlab password
+    - if setting up with ssh
+        - make sure your private key is added with the credentials in Jenkins
+        - select 'SSH Username with private key'
+        - enter your username, and copy your private key
+    - enter an id and description
+5. click Create button
 
 ### Create Different Jenkins Job Types
+
 #### Freestyle
+1. in Jenkins UI on the dashboard, click 'New Item'
+2. enter a name and select 'Freestyle Project'
+    - under Source Code Management, select Git
+        - enter the repository url (github or gitlab)
+        - select credentials or add credentials and specify the branch name
+    - add build steps
+        - select 'Invoke top-level Maven targets'
+        - select Maven version
+        - add Goals (Test, Package, etc.)
+3. building a docker image
+     - in the freestyle job dashboard, click configure
+     - add on a build step, 'Execute shell'
+     - enter docker commands
+        ```
+        docker build -t java-maven-app:1.0 .
+        ```
+    - save
+4. pushing image to dockerhub (private docker repository)
+    - add new Jenkins credentials for dockerhub
+    - configure your credentials as secrets to be used in the docker login command
+        - in configuration > build environment, select 'Use secret text(s) or file(s)
+        - in bindings select 'Username and password (separated)'
+        - enter variable names of your liking
+        - choose 'Specific Credentials' and select the dockerhub credentials
+        - save
+    - update docker commands with docker push
+        ```
+        docker build -t <name of dockerhub repo>:<tag> .
+        docker login -u $USERNAME -p $PASSWORD
+        docker push <image name>
+        ```
+NOTE: if there is a warning like this in the logs: "Using --password via the CLI is insecure. Use --password-stdin...", update the docker login command to `echo $PASSWORD | docker login -u $USERNAME --password-stdin`
+
+5. BONUS: deploying to Nexus
+    - since nexus is not secure https, it is http, need to configure insecure repository in Jenkins
+    - in the Jenkin server, not the container, create daemon.json file
+        - `vim /etc/docker/daemon.json`
+        - add this:
+            ```
+            { 
+                "insecure-registries": ["<nexus ip: docker repo port>"]
+            }
+            ```
+    - restart docker, `systemctl restart docker`
+    - restart Jenkins container, will have to update the docker.sock permissions in the container again (every time docker stops and starts)
+    - create Nexus credentials in Jenkins (the user with permissions for the docker repo)
+    - select the Nexus credentials in the freestyle job configuration
+    - update docker commands:
+        ```
+        docker build -t <nexus ip:docker repo port>/<app-name>:<tag> .
+        echo $PASSWORD | docker login -u $USERNAME --password-stdin <nexus ip: docker repo port>
+        docker push <image name>
+        ```
+
 #### Pipeline
 #### Multibranch Pipeline
