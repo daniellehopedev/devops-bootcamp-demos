@@ -105,6 +105,9 @@ USER jenkins
         - make sure your private key is added with the credentials in Jenkins
         - select 'SSH Username with private key'
         - enter your username, and copy your private key
+        - if needed, add the key from github to the known_hosts file in the Jenkins container in the .ssh folder
+            - can run `ssh-keyscan github.com >> ~/.ssh/known_hosts` to copy github's key to the known_hosts file
+            - run this as jenkins user in the jenkins container
     - enter an id and description
 5. click Create button
 
@@ -166,4 +169,37 @@ NOTE: if there is a warning like this in the logs: "Using --password via the CLI
         ```
 
 #### Pipeline
+1. in Jenkins on the Dashboard
+    - 'New Item' > enter a name > select 'Pipeline'
+2. in 'Pipeline' section
+    - for 'Definition' select 'Pipeline script from scm'
+    - in 'SCM' (source code manager)
+        - select 'Git
+        - add the git repo url and credentials
+        - specify the branch (can be a regex (regular express) or text)
+    - for 'Script Path', add the path to the Jenkinsfile in the project
+3. complete pipeline setup
+    - Jenkinsfile: https://github.com/daniellehopedev/java-maven-app/blob/feature/jenkins-jobs/script.groovy
+    - Groovy script: https://github.com/daniellehopedev/java-maven-app/blob/feature/jenkins-jobs/Jenkinsfile
+
 #### Multibranch Pipeline
+1. in Jenkins on the Dashboard
+    - 'New Item' > enter a name
+        - typically the job name would be the same as the application name that the job is for
+2. similar to above, in the 'Branch Sources' section
+    - select 'Git' and add git repository information
+3. for 'Behaviors', select 'Discover branches' and 'Filter by name (with regular expression)'
+    - enter a regex to match a branch(s) or match all branches
+4. in 'Mode' section under 'Build Configuration'
+    - select 'by Jenkinsfile' and give the path to the file
+5. BONUS: can add branch based logic to the Jenkinsfile
+    - this will execute stages based on the branch
+    ```
+        // execute this stage when the branch is the master branch
+        // can `echo $BRANCH_NAME` to print out the branch
+        when {
+            expression { BRANCH_NAME == 'master' }
+        }
+        steps...
+    ```
+NOTE: all branches configured in the multibranch pipeline job should share the same Jenkinsfile
