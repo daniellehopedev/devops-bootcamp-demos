@@ -179,8 +179,8 @@ NOTE: if there is a warning like this in the logs: "Using --password via the CLI
         - specify the branch (can be a regex (regular express) or text)
     - for 'Script Path', add the path to the Jenkinsfile in the project
 3. complete pipeline setup
-    - Jenkinsfile: https://github.com/daniellehopedev/java-maven-app/blob/feature/jenkins-jobs/script.groovy
-    - Groovy script: https://github.com/daniellehopedev/java-maven-app/blob/feature/jenkins-jobs/Jenkinsfile
+    - Groovy script: https://github.com/daniellehopedev/java-maven-app/blob/feature/jenkins-jobs/script.groovy
+    - Jenkinsfile: https://github.com/daniellehopedev/java-maven-app/blob/feature/jenkins-jobs/Jenkinsfile
 
 #### Multibranch Pipeline
 1. in Jenkins on the Dashboard
