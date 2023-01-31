@@ -33,4 +33,4 @@ AWS, Linux
     - subcommand = specifies which operation to perform
 
 ### Usefull commands to know to achieve the following:
-1. aws cli examples: 
+1. aws cli examples: https://github.com/daniellehopedev/devops-bootcamp-demos/blob/main/module-9-demos/aws-cli-notes/aws-cli-commands.sh
