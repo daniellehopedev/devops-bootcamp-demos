@@ -111,9 +111,11 @@ stage('deploy') {
     }
 }
 ```
-2. add the ip of jenkins to the Source list in the security group for the ec2 server
+2. Jenkinsfile: https://github.com/daniellehopedev/java-maven-app/blob/feature/jenkinsfile-ec2-docker/Jenkinsfile
+
+3. add the ip of jenkins to the Source list in the security group for the ec2 server
     - this is for allowing jenkins to ssh into the ec2 server
-3. ssh into the ec2 instance to check if image was deployed and to see container running
+4. ssh into the ec2 instance to check if image was deployed and to see container running
 
 ### Configure security group on EC2 Instance
 1. add a rule for port 8080 to the security group, to allow access to the application from the browser
