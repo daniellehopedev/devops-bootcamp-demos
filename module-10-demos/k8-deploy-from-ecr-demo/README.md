@@ -4,7 +4,7 @@
 Deploy our web application in K8s cluster from private Docker registry
 
 ### Technologies used:
-Kubernetes, Helm, AWS ECR, Docker
+Kubernetes, AWS ECR, Docker
 
 ### Project Objectives:
 - Create Secret for credentials for the private Docker registry
