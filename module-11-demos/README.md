@@ -142,7 +142,7 @@ Kubernetes, AWS EKS
 8. check on the pod: `kubectl get pods -n kube-system`
 
 ### Deploy Sample Application
-1. sample nginx deployment config: 
+1. sample nginx deployment config: https://github.com/daniellehopedev/devops-bootcamp-demos/blob/main/module-11-demos/nginx-config.yaml
     - internal service with AWS loadbalancer attached to it
 2. apply the nginx config: `kubectl apply -f nginx.yaml`
 3. see the cluster and external ips of the service
@@ -163,7 +163,59 @@ Kubernetes, AWS EKS, AWS Fargate
 - Create Fargate Profile
 - Deploy an example application to EKS cluster using Fargate profile
 ---
+### Fargate
+- serverless way of deploying containers and creating pods in our clusters
+    - no EC2 instances created in our AWS account
+    - will be on an AWS managed account
+- will provision a VM for each pod
+- no support for stateful application or daemonsets yet
+- can have Fargate in addiion to Node Group attached to our EKS cluster
+
 ### Create Fargate IAM Role
+1. from the IAM console, create the role
+    - the service will be EKS
+2. select EKS - Fargate pod
+    - for permissions you will see a pre-selected policy, AmazonEKSFargatePodExecutionRolePolicy
+
+### Create the Fargate Profile
+- Fargate Profile Overview
+    - pod selection rule
+    - specifies which pods should use fargate when they are launched
+- Use Cases for having both Node Group and Fargate
+    - can have a DEV and TEST environment inside the same cluster (ex: Node Group for TEST and Fargate for DEV)
+        - pods with a specific selector is launched through Fargate
+        - pods with e.g. namespace 'dev' launched through Fargate
+    - may used both because of the limitations of Fargate
+        - use Node Group for Stateful apps and use Fargate for Stateless apps
+
+1. back at the eks cluster page, in the 'Compute' tab, select 'Add Fargate Profile'
+2. add details
+    - enter a name
+    - select the created eks fargate role
+    - for Subnets, remove the public subnets from the list (fargate will create the pods only on the private subnets)
+    - configure pod selection
+        - in nginx-config.yaml, add `namespace: dev` to the deployment metadata
+        - enter that namespace in the Namespace field for 'Pod selectors'
+    - configure match labels
+        - in nginx-config.yaml, add `profile: fargate` to spec.selector.matchLabels and spec.template.metadata.labels for the deployment
+        - add a match label with the above key and value
+3. review and create
+
+### Deploy Pod through Fargate
+1. create a namespace called 'dev'
+    - `kubectl create ns dev`
+2. apply the nginx-config.yaml 
+3. check components
+    - `kubectl get pods -n dev`
+        - will see one pod running
+    - `kubectl get nodes`
+        - will see ec2 instance and fargate profile
+
+### Clean Up Cluster Resources
+1. delete Node Groups and Fargate Profiles
+2. delete the cluster
+3. delete the created eks roles
+4. delete the cloudformation stack 
 ---
 ---
 ### Demo Project:
