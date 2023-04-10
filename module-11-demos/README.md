@@ -228,3 +228,30 @@ Kubernetes, AWS EKS, Eksctl, Linux
 - Create EKS cluster using eksctl tool that reduces the manual effort of creating an EKS cluster
 ---
 ### Create EKS cluster
+- eksctl overview
+    - command line tool for working with EKS clusters that automates many individual tasks
+    - execute just one command
+    - necessary components gets created and configured in the background
+    - cluster will be created with default parameters
+    - with more cli options you can customize your cluster
+    - https://eksctl.io/
+
+1. install eksctl
+    - https://github.com/weaveworks/eksctl#installation
+2. make aws credentials are configured
+3. create eks cluster command
+    ```
+        # --version is kubernetes version
+
+        eksctl create cluster
+            --name demo-cluster
+            --version 1.18
+            --region us-east-1
+            --nodegroup-name demo-nodes
+            --node-type t2.micro
+            --nodes 2
+            --nodes-min 1
+            --nodes-max 3
+    ```
+4. can also create a config file (similar to k8s yaml format) to pass to the eksctl command to create a cluster
+    `eksctl create cluster -f cluster.yaml`
