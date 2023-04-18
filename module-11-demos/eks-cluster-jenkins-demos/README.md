@@ -112,6 +112,7 @@ Kubernetes, Jenkins, AWS EKS, Docker Hub, Java, Maven, Linux, Docker, Git
 
 ---
 ---
+
 ### Demo Project:
 Complete CI/CD Pipeline with EKS and AWS ECR
 
@@ -128,3 +129,26 @@ Kubernetes, Jenkins, AWS EKS, AWS ECR, Java, Maven, Linux, Docker, Git
     c. CI step: Build and push Docker image to AWS ECR
     d. CD step: Deploy new application version to EKS cluster
     e. CD step: Commit the version update
+---
+### Create ECR Registry
+1. in AWS console, go to ECR (Elastic Container Registry)
+    - create a private repository
+2. create credentials for the repository in Jenkins
+    - on the repository, click on 'View push commands' to see a "cheatsheet" of useful commands
+        - can execute the aws ecr command locally to get the password of the ecr repository: `aws ecr get-login-password`
+    - use the password to create the credential in Jenkins with username AWS
+3. create a secret that holds the above credentials for pulling the image
+    - `kubectl create secret docker-registry <secret-name> --docker-server=<ecr-repository-url> --docker-username=AWS --docker-password=<ecr-password>`
+    - this secret will be used in the deployment config file for fetching the image
+4. update the deployment config imagePullSecret with the above secret name
+
+### Update Jenkinsfile
+1. update the build step, update the credentials to the ecr credentials created in Jenkins
+    - update the 'docker build' command with the ecr repository url
+2. can create an environment block above the 'stages' to hold environment variables for storing the repository server url and repo name
+3. add the ecr repo server to the docker login command as the needed third parameted when you are not pushing to the default dockerhub server
+
+### Config Files and Jenkinsfile
+1. Deployment.yaml: https://github.com/daniellehopedev/java-maven-app/blob/feature/complete-pipeline-ecr-eks/kubernetes/deployment.yaml
+2. Service.yaml: https://github.com/daniellehopedev/java-maven-app/blob/feature/complete-pipeline-ecr-eks/kubernetes/service.yaml#enroll-beta
+3. Jenkinsfile: https://github.com/daniellehopedev/java-maven-app/blob/feature/complete-pipeline-ecr-eks/Jenkinsfile
