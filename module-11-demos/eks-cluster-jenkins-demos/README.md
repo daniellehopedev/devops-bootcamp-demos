@@ -81,7 +81,38 @@ Kubernetes, Jenkins, AWS EKS, Docker Hub, Java, Maven, Linux, Docker, Git
     d. CD step: Deploy new application version to EKS cluster
     e. CD step: Commit the version update
 ---
+### Create Deployment and Service K8s Configuration
+1. Deployment manifest: https://github.com/daniellehopedev/java-maven-app/blob/feature/k8s-eks-complete-pipeline/kubernetes/deployment.yaml
+2. Service manifest: https://github.com/daniellehopedev/java-maven-app/blob/feature/k8s-eks-complete-pipeline/kubernetes/service.yaml
+
+### Update Jenkinsfile: Integrate EKS Deploy Step
+1. will need envsubst: https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html
+    - need to install gettext-base tool on Jenkins for envsubst to work
+    - envsubst is a program that substitutes the values of environment variables
+    ```
+    # commands to install gettext-base tool
+    apt-get update
+    apt-get install gettext-base
+    ```
+2. need to create a secret of type docker-registry for docker hub credentials
+    - kubernetes needs permission to fetch the image from the docker hub registry
+    - the docker hub credentials needs to be available inside the k8s cluster
+    - need to create the secret just once
+    - create the secret locally using kubectl
+        ```
+        kubectl create secret docker-registry my-registry-key \
+        --docker-server = docker.io \
+        --docker-username = <dockerhub-username> \
+        --docker-password = <dockerhub-password>
+        ```
+    - another option is to add the command to the pipeline, but need to check if it exists first before creating it
+    - secrets would typically be hosted in one repository, one secret per namespace
+3. add imagePullSecrets to deployment.yaml for the created docker-registry secret
+4. Jenkinsfile: https://github.com/daniellehopedev/java-maven-app/blob/feature/k8s-eks-complete-pipeline/Jenkinsfile
+
 ---
+---
+
 ### Demo Project:
 Complete CI/CD Pipeline with EKS and AWS ECR
 
@@ -98,3 +129,26 @@ Kubernetes, Jenkins, AWS EKS, AWS ECR, Java, Maven, Linux, Docker, Git
     c. CI step: Build and push Docker image to AWS ECR
     d. CD step: Deploy new application version to EKS cluster
     e. CD step: Commit the version update
+---
+### Create ECR Registry
+1. in AWS console, go to ECR (Elastic Container Registry)
+    - create a private repository
+2. create credentials for the repository in Jenkins
+    - on the repository, click on 'View push commands' to see a "cheatsheet" of useful commands
+        - can execute the aws ecr command locally to get the password of the ecr repository: `aws ecr get-login-password`
+    - use the password to create the credential in Jenkins with username AWS
+3. create a secret that holds the above credentials for pulling the image
+    - `kubectl create secret docker-registry <secret-name> --docker-server=<ecr-repository-url> --docker-username=AWS --docker-password=<ecr-password>`
+    - this secret will be used in the deployment config file for fetching the image
+4. update the deployment config imagePullSecret with the above secret name
+
+### Update Jenkinsfile
+1. update the build step, update the credentials to the ecr credentials created in Jenkins
+    - update the 'docker build' command with the ecr repository url
+2. can create an environment block above the 'stages' to hold environment variables for storing the repository server url and repo name
+3. add the ecr repo server to the docker login command as the needed third parameted when you are not pushing to the default dockerhub server
+
+### Config Files and Jenkinsfile
+1. Deployment.yaml: https://github.com/daniellehopedev/java-maven-app/blob/feature/complete-pipeline-ecr-eks/kubernetes/deployment.yaml
+2. Service.yaml: https://github.com/daniellehopedev/java-maven-app/blob/feature/complete-pipeline-ecr-eks/kubernetes/service.yaml#enroll-beta
+3. Jenkinsfile: https://github.com/daniellehopedev/java-maven-app/blob/feature/complete-pipeline-ecr-eks/Jenkinsfile
