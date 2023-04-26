@@ -40,3 +40,41 @@ Terraform, AWS, Docker, Linux, Git
 
 ### Configure TF Script to Deploy Docker Container to EC2 Instance
 - entry-script.sh: https://github.com/daniellehopedev/terraform-learn/blob/main/terraform-aws-infra/entry-script.sh
+
+---
+---
+
+### Demo Project:
+Modularize Project
+
+### Technologies used:
+Terraform, AWS, Docker, Linux, Git
+
+### Project Description:
+- Divide Terraform resources into reusable modules
+---
+### Modules
+- container for multiple resources, used together
+- can create modules and/or use existing modules
+- https://developer.hashicorp.com/terraform/tutorials/modules/module
+
+### Why Modules?
+- organize and group configurations
+- encapsulate into distinct logical components
+- re-use
+- customize the configuration with variables
+- expose created resources or specific attributes
+
+### Best Practice - Project Structure
+- Files
+    - main.tf
+    - variables.tf
+    - outputs.tf
+    - providers.tf
+- modules folder
+    - root module
+    - /modules = "child modules" - a module that is called by another configuration
+- run `terraform init` whenever a module is added or changed
+
+### Modularized AWS Infrastructure Configuration Repo
+- Repo: https://github.com/daniellehopedev/terraform-learn/tree/feature/modules/terraform-aws-infra
