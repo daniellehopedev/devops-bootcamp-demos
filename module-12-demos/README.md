@@ -78,3 +78,23 @@ Terraform, AWS, Docker, Linux, Git
 
 ### Modularized AWS Infrastructure Configuration Repo
 - Repo: https://github.com/daniellehopedev/terraform-learn/tree/feature/modules/terraform-aws-infra
+
+---
+---
+
+### Demo Project:
+Terraform & AWS EKS
+
+### Technologies used:
+Terraform, AWS EKS, Docker, Linux, Git
+
+### Project Description:
+- Automate provisioning EKS cluster with Terraform
+---
+### Terraform Module for VPC
+- https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
+- vpc.tf: https://github.com/daniellehopedev/terraform-learn/blob/feature/eks/terraform-aws-infra/vpc.tf
+
+### Terraform Module for EKS
+- https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest
+- eks-cluster.tf: https://github.com/daniellehopedev/terraform-learn/blob/feature/eks/terraform-aws-infra/eks-cluster.tf
