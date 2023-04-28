@@ -98,3 +98,43 @@ Terraform, AWS EKS, Docker, Linux, Git
 ### Terraform Module for EKS
 - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest
 - eks-cluster.tf: https://github.com/daniellehopedev/terraform-learn/blob/feature/eks/terraform-aws-infra/eks-cluster.tf
+
+---
+---
+
+### Demo Project:
+Complete CI/CD with Terraform
+
+### Technologies used:
+Terraform, Jenkins, Docker, AWS, Git, Java, Maven, Linux, Docker Hub
+
+### Project Description:
+Integrate provisioning stage into complete CI/CD Pipeline to automate provisioning server instead of deploying to an existing server
+- Create SSH Key Pair
+- Install Terraform inside Jenkins container
+- Add Terraform configuration to application's git repository
+- Adjust Jenkinsfile to add "provision" step to the CI/CD pipeline that provisions EC2 instance
+- So the complete CI/CD project we build has the following configuration:
+    a. CI step: Build artifact for Java Maven application
+    b. CI step: Build and push Docker image to Docker Hub
+    c. CD step: Automatically provision EC2 instance using TF
+    d. CD step: Deploy new application version on the provisioned EC2 instance with Docker Compose
+---
+### Create SSH Key Pair
+1. in AWS create a key pair and configure credentials in Jenkins from that key pair
+    - can also create a public private key with terraform using sshkeygen
+2. take generated pem file and create 'SSH Username with private key' credential in Jenkins
+    - user is ec2-user and enter the private key directly (the contents of the pem file)
+
+### Install TF Inside Jenkins Container
+1. ssh into the container as the root user
+    - installation instructions: https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
+
+### Add the Terraform configuration files to the java maven application
+- terraform directory: https://github.com/daniellehopedev/java-maven-app/tree/feature/terraform-cicd/terraform
+
+### Adjust Jenkinsfile to add provision step
+- Updated Jenkinsfile: https://github.com/daniellehopedev/java-maven-app/blob/feature/terraform-cicd/Jenkinsfile
+- docker-compose: https://github.com/daniellehopedev/java-maven-app/blob/feature/terraform-cicd/docker-compose.yaml
+- dockerfile: https://github.com/daniellehopedev/java-maven-app/blob/feature/terraform-cicd/Dockerfile
+- server-cmds: https://github.com/daniellehopedev/java-maven-app/blob/feature/terraform-cicd/server-cmds.sh
