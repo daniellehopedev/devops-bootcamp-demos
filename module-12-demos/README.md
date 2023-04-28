@@ -138,3 +138,48 @@ Integrate provisioning stage into complete CI/CD Pipeline to automate provisioni
 - docker-compose: https://github.com/daniellehopedev/java-maven-app/blob/feature/terraform-cicd/docker-compose.yaml
 - dockerfile: https://github.com/daniellehopedev/java-maven-app/blob/feature/terraform-cicd/Dockerfile
 - server-cmds: https://github.com/daniellehopedev/java-maven-app/blob/feature/terraform-cicd/server-cmds.sh
+
+---
+---
+
+### Demo Project:
+Configure a Shared Remote State
+
+### Technologies used:
+Terraform, AWS S3
+
+### Project Description:
+- Configure Amazon S3 as remote storage for Terraform state
+---
+### Configure storage for Terraform state
+- Problem: each user/CI server must make sure they always have the latest state data before running Terraform
+    - How do we share a same Terraform state file?
+- Configure a remote state
+    - TF writes the data to this remote data store
+        - good for data backup
+        - can be shared
+        - keeps sensitive data off disk
+    - Different remote storage options possible
+
+### Configure remote storage in main.tf
+- add the below snippet to the top of your main.tf
+    - full main.tf: https://github.com/daniellehopedev/java-maven-app/blob/feature/terraform-remote-state/terraform/main.tf
+```
+terraform {
+    required_version = ">= 0.12"
+    backend "s3" {
+        bucket = "myapp-bucket"
+        key = "myapp/state.tfstate"
+        region = "us-east-1"
+    }
+}
+```
+- create AWS S3 Bucket
+    - in AWS, go to Amazon S3 service, and create a bucket
+    - good practice to enable Bucket Versioning
+- `terraform state list`: will retrieve data from the bucket and give a list of resources created from the remote storage
+
+### Useful links
+- Terraform Backends: https://www.terraform.io/docs/backends/
+- Remote State: https://www.terraform.io/docs/state/remote.html
+- AWS S3: https://aws.amazon.com/s3/
