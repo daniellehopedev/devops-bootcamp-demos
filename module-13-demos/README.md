@@ -60,4 +60,5 @@ Python, GitHub, VS Code, Git
 - Write an application that talks to an API of an external application (GitHub) and lists all the public GitHub repositories for a specified user
 ---
 ### Implementation
-- main.py:
+- install requests module: https://pypi.org/project/requests/
+- main.py: https://github.com/daniellehopedev/programming-with-python/blob/main/github-api-request/main.py
