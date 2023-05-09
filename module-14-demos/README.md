@@ -32,7 +32,7 @@ Python, Boto3, AWS, Terraform
     - is not idempotent
     - need to explicitly write code to delete resources
 - Why use Python Boto3?
-    - can do more things becuase of its low-level API
+    - can do more things because of its low-level API
     - more complex logic is possible
     - python is a programming language and has lots of libraries
     - boto is a aws library
@@ -69,7 +69,13 @@ Automate displaying EKS cluster information
 Python, Boto3, AWS EKS
 
 ### Project Description:
-- Write a Pyton script that fetches and displays EKS cluster status and information
+- Write a Python script that fetches and displays EKS cluster status and information
+---
+### Create EKS cluster
+- Configuration from Terraform Module for creating EKS cluster: https://github.com/daniellehopedev/terraform-learn/tree/feature/eks/terraform-aws-infra
+
+### Python Script:
+- eks-status-checks.py: https://github.com/daniellehopedev/python-automation/blob/main/eks-status-ckecks.py
 
 ---
 ---
@@ -84,6 +90,24 @@ Python, Boto3, AWS
 - Write a Python script that automates creating backups for EC2 Volumes
 - Write a Python script that cleans up old EC2 Volume snapshots
 - Write a Python script that restores EC2 Volumes
+---
+### Volumes:
+- AWS Storage Components => stores EC2 Instance data
+- when creating an EC2 instance, a volume is created and attached to that instance
+- when deleting an EC2 instance, the volume will also be deleted
+- Volume Snapshot => copy of a volume
+
+### Prep:
+- Create 2 EC2 instances in aws and add tags to them (one dev and one prod)
+
+### Python Script - Creating backups:
+ - volume-backups.py: https://github.com/daniellehopedev/python-automation/blob/main/volume-backups.py
+
+ ### Python Script - Snapshot Cleanup:
+ - cleanup-snapshots.py (leaves 2 latest snapshots): https://github.com/daniellehopedev/python-automation/blob/main/cleanup-snapshots.py
+
+ ### Python Script - Restore from backup:
+ - restore-volume.py: https://github.com/daniellehopedev/python-automation/blob/main/restore-volume.py
 
 ---
 ---
@@ -100,3 +124,22 @@ Python, Linode, Docker, Linux
 - Write a Python script that monitors the website by accessing it and validating the HTTP response
 - Write a Python script that sends an email notification when the website is down
 - Write a Python script that automatically restarts the application & server when the application is down
+---
+### Prep:
+1. Create a Server on Linode Cloud Platform
+2. Install Docker on the server
+3. Run nginx container
+
+### Write Automation Program:
+1. Write Python program that checks application endpoint and checks the status (HTTP request)
+2. Send email, when website is down
+
+### Automate fixing the problem:
+1. Re-start Docker Container
+2. Re-start Server
+
+### Python Script:
+- modules needed to install for the script
+    - https://pypi.org/project/paramiko/
+    - https://pypi.org/project/linode-api4/
+- monitor-website.py: https://github.com/daniellehopedev/python-automation/blob/main/monitor-website.py
