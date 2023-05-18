@@ -116,7 +116,26 @@ Ansible, AWS, Docker, Terraform, Linux
 - Create AWS EC2 Instance with Terraform
 - Write Ansible Playbook that installs necessary technologies like Docker and Docker Compose, copies docker-compose file to the server and starts the Docker containers configured inside the docker-compose file
 ---
+### Create EC2 Instance
+1. Terraform script to create EC2 instance
+    - https://github.com/daniellehopedev/terraform-learn/tree/feature/ansible-ec2
+2. Script for installing docker-compose for reference
+    - https://github.com/daniellehopedev/java-maven-app/blob/feature/terraform-remote-state/terraform/entry-script.sh
 
+### Playbook
+1. deploy-docker-ec2-user.yaml: https://github.com/daniellehopedev/ansible-learn/blob/main/deploy-docker-ec2-user.yaml
+- useful modules:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/pipe_lookup.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/meta_module.html
+    - https://docs.ansible.com/ansible/latest/collections/community/docker/docker_image_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/pip_module.html
+    - https://docs.ansible.com/ansible/latest/collections/community/docker/docker_login_module.html
+    - https://docs.ansible.com/ansible/latest/collections/community/docker/docker_compose_module.html
+- interactive prompts:
+    - https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_prompts.html
+    
 ---
 ---
 
