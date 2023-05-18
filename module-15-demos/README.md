@@ -54,6 +54,22 @@ Ansible, Node.js, DigitalOcean, Linux
 - Create server on DigitalOcean
 - Write Ansible Playbook that installs necessary technologies, creates Linux user for an application and deploys a NodeJS application with that user
 ---
+### Create DigitalOcean Server
+1. start up a small ubuntu server on DigitalOcean
+2. create hosts file to setup connection for ansible
+
+### Playbook
+1. simple node application for demo: https://github.com/daniellehopedev/simple-nodejs
+2. deploy-node.yaml: https://github.com/daniellehopedev/ansible-learn/blob/main/deploy-node.yaml
+- useful modules:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html#
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+    - https://docs.ansible.com/ansible/latest/collections/community/general/npm_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html
+    - https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_async.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/shell_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
 
 ---
 ---
@@ -68,6 +84,24 @@ Ansible, Nexus, DigitalOcean, Java, Linux
 - Create server on DigitalOcean
 - Write Ansible Playbook that creates Linux user for Nexus, configure server, installs and deploys Nexus and verifies that it is running successfully
 ---
+### Create DigitalOcean Server
+1. start up a small ubuntu server on DigitalOcean
+2. make sure to copy the ip address to the hosts file
+
+### Playbook
+1. deploy-nexus.yaml: https://github.com/daniellehopedev/ansible-learn/blob/main/deploy-nexus.yaml
+2. nexus.sh - shell script for reference: https://github.com/daniellehopedev/ansible-learn/blob/main/nexus.sh
+-  useful modules:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/find_module.html
+    - https://docs.ansible.com/ansible/2.10/collections/ansible/builtin/stat_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/group_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/blockinfile_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/lineinfile_module.html
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/pause_module.html
+- conditionals: 
+    - https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html
 
 ---
 ---
