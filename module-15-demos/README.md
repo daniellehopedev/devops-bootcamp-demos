@@ -135,7 +135,7 @@ Ansible, AWS, Docker, Terraform, Linux
     - https://docs.ansible.com/ansible/latest/collections/community/docker/docker_compose_module.html
 - interactive prompts:
     - https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_prompts.html
-    
+
 ---
 ---
 
@@ -149,6 +149,15 @@ Ansible, Terraform, AWS, Docker, Linux
 - Create Ansible Playbook for Terraform integration
 - Adjust Terraform configuration to execute Ansible Playbook automatically, so once Terraform provisions a server, it executes an Ansible playbook that configures the server
 ---
+### Ansible Playbook
+1. deploy-docker-ec2-user.yaml: https://github.com/daniellehopedev/ansible-learn/blob/main/deploy-docker-ec2-user.yaml
+2. updated terraform config: https://github.com/daniellehopedev/terraform-learn/blob/feature/ansible-ec2/terraform-aws-infra/main.tf
+- useful modules:
+    - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/wait_for_module.html
+- provisioners:
+    - https://developer.hashicorp.com/terraform/language/resources/provisioners/syntax
+- null_resource:
+    - https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource
 
 ---
 ---
