@@ -209,6 +209,14 @@ Ansible, Terraform, Kubernetes, AWS EKS, Python, Linux
 - Create EKS cluster with Terraform
 - Write Ansible Play to deploy application in a new K8s namespace
 ---
+### Create EKS cluster
+1. eks terraform script setup: https://github.com/daniellehopedev/terraform-learn/tree/feature/eks/terraform-aws-infra
+
+### Ansible Script:
+1. deploy-to-k8s.yaml: https://github.com/daniellehopedev/ansible-learn/blob/main/deploy-to-k8s.yaml
+2. nginx-config.yaml: https://github.com/daniellehopedev/terraform-learn/blob/feature/eks/terraform-aws-infra/nginx-config.yaml
+- module:
+    - https://docs.ansible.com/ansible/latest/collections/community/kubernetes/k8s_module.html
 
 ---
 ---
