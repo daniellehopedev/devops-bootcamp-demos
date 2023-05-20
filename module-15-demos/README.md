@@ -240,6 +240,32 @@ Ansible, Jenkins, DigitalOcean, AWS, Boto3, Docker, Java, Maven, Linux, Git
     4. Install Ansible, Python3 and Boto3 on the Ansible Control Node server
     5. With everything installed and copied to the remote Ansible Control Node server, execute the playbook remotely on that Control Node that will configure the 2 EC2 Managed Nodes
 ---
+### Create another server on DigitalOcean
+1. create another server on DO and install Ansible
+2. install python module for aws
+    - make sure pip3 is installed, if not, install it
+    - install boto3 and botocore
+3. configure aws credentials on the server
+    - create .aws directory, and create a credentials file (copy the credentials from your own local directory)
+
+### Create 2 EC2 Instances
+1. start up ec2 instances in aws
+    - can create a new key pair to give to ansible for connecting to the instances
+
+### Jenkinsfile
+1. java-maven-app project: https://github.com/daniellehopedev/java-maven-app/tree/feature/ansible-jenkins
+2. jenkinsfile (copies files to ansible server to run the ansible playbook): https://github.com/daniellehopedev/java-maven-app/blob/feature/ansible-jenkins/Jenkinsfile
+    - need to create ansible-server-key (to connect to ansible server in jenkins) and ec2-server-key (to copy the contents of what the private key contains to the ansible server) credentials in jenkins
+
+### Jenkins Pipeline
+1. create a simple ansible-pipeline
+2. leave everything default
+3. add repository url for the java-maven-app git repo and add the branch
+4. run the pipeline
+
+### Run Ansible Playbook From Jenkins
+1. jenkinsfile ("execute ansible playbook" stage): https://github.com/daniellehopedev/java-maven-app/blob/feature/ansible-jenkins/Jenkinsfile
+    - install ssh pipeline steps plugin on jenkins
 
 ---
 ---
