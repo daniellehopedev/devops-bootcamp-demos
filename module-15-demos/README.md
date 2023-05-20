@@ -279,3 +279,19 @@ Ansible, Docker, AWS, Linux
 ### Project Description:
 - Break up large Ansible Playbooks into smaller manageable files using Ansible Roles
 ---
+### Ansible Roles Overview
+- like small applications
+- easy to maintain and reuse
+- standard file structure
+    - easy to navigate
+    - easy to maintain
+- group content in roles
+- break up large playbooks into smaller manageable files
+- easily reuse and share them with others
+- like a package for your tasks
+- Roles Documentation: https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html
+- Using Variables: https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
+
+### Roles Directory
+1. roles directory: https://github.com/daniellehopedev/ansible-learn/tree/main/roles
+2. deploy-docker-with-roles.yaml: https://github.com/daniellehopedev/ansible-learn/blob/main/deploy-docker-with-roles.yaml
