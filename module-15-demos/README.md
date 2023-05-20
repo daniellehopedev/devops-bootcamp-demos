@@ -172,6 +172,29 @@ Ansible, Terraform, AWS
 - Create EC2 Instance with Terraform
 - Write Ansible AWS EC2 Plugin to dynamically set inventory of EC2 servers that Ansible should manage, instead of hard-coding server addresses in Ansible inventory file
 ---
+### Create EC2 Instance with Terraform
+1. Terraform config: https://github.com/daniellehopedev/terraform-learn/blob/main/terraform-python-automation/main.tf
+    - can remove the user_data here, since we don't need to configure anything on the server
+    - update the configuration, in the vpc resource
+        - add `enable_dns_hostnames = true` to assign public dns to the ec2 instances
+- Dynamic Inventory: https://docs.ansible.com/ansible/latest/inventory_guide/intro_dynamic_inventory.html
+- Inventory Plugins: https://docs.ansible.com/ansible/latest/plugins/inventory.html#inventory-plugins
+- EC2 Inventory Source: https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html
+- Ansible Inventory command: https://docs.ansible.com/ansible/latest/cli/ansible-inventory.html
+
+### Ansible Playbook
+1. ansible.cfg (enable ec2 plugin): https://github.com/daniellehopedev/ansible-learn/blob/main/ansible.cfg
+2. in the playbook, update all the 'hosts' attributes to 'aws_ec2'
+3. setup ssh credentials for login to the remote servers
+    - add `remote_user = ec2_user` and `private_key_file = <path-to-ssh-key>` to the ansible cfg file
+4. inventory_aws_ec2.yaml: https://github.com/daniellehopedev/ansible-learn/blob/main/inventory_aws_ec2.yaml
+    - ansible-inventory cmd: `ansible-inventory -i inventory_aws_ec2.yaml --list`
+        - lists all the data fetched from aws about your servers
+        - contains list of host names
+        - `--graph` will give you a cleaner output of the dns names (shows the private dns names)
+        - if there are no public dns names assigned, the private dns names will be listed
+5. ansible-playbook command: `ansible-playbook -i inventory_aws_ec2.yaml <ansible-playbook>`
+    - will use inventory_aws_ec2.yaml to get the host/dns names dynamically instead of hardcoding them in the hosts file
 
 ---
 ---
