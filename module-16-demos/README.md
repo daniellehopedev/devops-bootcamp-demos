@@ -24,7 +24,7 @@ Prometheus, Kubernetes, Helm, AWS EKS, eksctl, Grafana, Linux
 1. Online Shop Microservices Application: 
     - https://github.com/daniellehopedev/microservices-demo
 2. microservices kubernetes deployment config: 
-    - https://github.com/daniellehopedev/kubernetes-demos/blob/main/module-16-demos/prometheus-monitoring/config-microservices.yaml
+    - https://github.com/daniellehopedev/devops-bootcamp-demos/blob/main/module-16-demos/prometheus-monitoring/config-microservices.yaml
      - `kubectl apply -f config-microservices.yaml`
 3. check pods
     - `kubectl get pod`
