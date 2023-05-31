@@ -216,7 +216,7 @@ Ansible, Terraform, Kubernetes, AWS EKS, Python, Linux
 1. deploy-to-k8s.yaml: https://github.com/daniellehopedev/ansible-learn/blob/main/deploy-to-k8s.yaml
 2. nginx-config.yaml: https://github.com/daniellehopedev/terraform-learn/blob/feature/eks/terraform-aws-infra/nginx-config.yaml
 - module:
-    - https://docs.ansible.com/ansible/latest/collections/community/kubernetes/k8s_module.html
+    - https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_module.html
 
 ---
 ---
