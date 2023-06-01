@@ -143,3 +143,14 @@ Python, Linode, Docker, Linux
     - https://pypi.org/project/paramiko/
     - https://pypi.org/project/linode-api4/
 - monitor-website.py: https://github.com/daniellehopedev/python-automation/blob/main/monitor-website.py
+
+### Useful Links:
+- Python Library used to send requests: https://pypi.org/project/requests/
+- HTTP Response Status Codes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+- SMTP built-in module used to send emails: https://docs.python.org/3/library/smtplib.html
+- Less Secure App Configuration (to allow for less secure sign-in from the application): https://myaccount.google.com/lesssecureapps
+- Google App Passwords Configuration (when using Two-Step Verification): https://myaccount.google.com/apppasswords
+- Built-in module OS (os dependant functionality ex. grabbing environment variables): https://docs.python.org/3/library/os.html
+- External module for SSH Connection: https://pypi.org/project/paramiko/
+- Linode API: https://pypi.org/project/linode-api4/
+- Built-in module "time": https://docs.python.org/3/library/time.html
