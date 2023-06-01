@@ -91,3 +91,167 @@ Kubernetes, Helm, Helmfile
 4. access the microservices frontend with localhost using port-forward
     - `kubectl port-forward <deployment-name> <port>`
 5. uninstall releases `helmfile destroy`
+---
+---
+### Demo Project:
+Deploy Microservices application in Kubernetes with Production & Security Best Practices
+
+### Technologies used:
+Kubernetes, Redis, Linux, Linode LKE
+
+### Project Description:
+- Create K8s manifests for Deployments and Services for all microservices of an online shop application
+- Deploy microservices to Linode's managed Kubernetes cluster
+---
+### Useful Links:
+- Ephemeral Volumes: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/
+- emptyDir: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
+- redis Docker Image: https://hub.docker.com/_/redis
+- Kubernetes Best Practices: https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-resource-requests-and-limits
+- Configure Liveness, Readiness Probes: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+
+### K8s Manifest for Deployments and Services
+1. config.yaml: https://github.com/daniellehopedev/kubernetes-demos/blob/main/k8s-microservices-deployment/config.yaml
+    - contains deployments and services for all microservices and redis
+    - for redis data persistance, a volume was added (redis-data)
+    - all of the services, aside from the frontend service (type NodePort), are internal services (type ClusterIP)
+
+### Deploy to Linode K8s Cluster
+1. from Linode UI, go to 'Kubernetes' and click 'Create Cluster'
+2. enter info
+    - Cluster Label
+    - Region
+    - Kubernetes Version
+3. for 'Add Node Pools' choose the plan with at least 2GB RAM, and there should be 3 nodes
+4. after creating the cluster, download the kubeconfig file for connecting to the cluster
+    - need to change the files permissions to be more strict
+        - `chmod 400 ~/Downloads/online-shop-kubeconfig.yaml`
+        - read-only permission for the user
+5. create env variable to point to the new kubeconfig file
+    - `export KUBECONFIG=~/Downloads/online-shop-kubeconfig.yaml`
+    - test the connection: `kubectl get node`
+        - should show the linode nodes
+6. create a new namespace
+    - `kubectl create ns online-shop`
+7. Deploy
+    - apply the config yaml file with all the services and deployments
+    - make sure to deploy in the new namespace
+    - `kubectl apply -f config.yaml -n online-shop`
+8. check deployment
+    - `kubectl get pod -n online-shop`
+    - `kubectl get svc -n microservices`
+        - show services, IPs, and PORTS
+9. access from browser
+    - use the IP from Linode for one of the nodes and the port listed for the frontend service in the info from the kubectl get svc command
+
+### Best Practices
+- config with best practices: https://github.com/daniellehopedev/kubernetes-demos/blob/main/k8s-microservices-deployment/config-best-practices.yaml
+
+1. Pinned (tag) version for each container image
+    - need to fixate a container image version for each microservice, instead of leaving it to take the latest by default
+    - not specifying a version makes it unpredictable, hard to know what exact versions are running on the cluster
+        - there could also be breaking changes
+    - adding a version will give more visibility on which versions are deployed in the cluster
+    ```
+    image: gcr.io/google-samples/microservices-demo/emailservice:v0.2.3
+    ```
+2. Liveness Probe (while app is running) for each container
+    - K8s manages its resources intelligently, it knows to restart a pod when it crashes
+    - but what if the pod is running and the application inside has an issue
+        - need to tell kubernetes which state the application is in, so kubernetes can restart the pod
+    - can perform health checks with Liveness Probe
+    ```
+    livenessProbe:
+        periodSeconds: 5
+        exec:
+        command: ["/bin/grpc_health_probe", "-addr=:8080"]
+    ```
+3. Readiness Probe (during app startup) for each container
+    - just like the case with the liveness probe, K8s knows the pod state, not the application state
+    - also liveness probe only does health checks after the container has started
+    - for this we need Readiness Probe
+        - will let K8s know if the application has started up and is ready to receive traffic
+    ```
+    readinessProbe:
+        periodSeconds: 5
+        exec:
+        command: ["/bin/grpc_health_probe", "-addr=:8080"]
+    ```
+4. Resource Requests for each container
+    - some applications need more CPU and Memory than others
+    - requests is what the container is guaranteed to get
+    - K8s Scheduler uses this to figure out where to run the Pods
+    - CPU resources are defined in millicores (m)
+    - Memory resources are defined in bytes (Mi)
+    ```
+    resources:
+        requests:
+        cpu: 100m
+        memory: 64Mi
+    ```
+5. Resource Limits for each container
+    - What if the application needs more resources?
+        - too much data to load into memory
+        - bug in application (infinite loop)
+        - the container will consume more than the requested resources
+    - if resources are not limited, the container  could consume all of the node's resources
+    - configuring limits makes sure the container never goes above a certain value, it is only allowed to go up to the limit
+    ```
+    # inside of resources block
+    limits:
+        cpu: 200m
+        memory: 128Mi
+    ```
+6. Don't expose a NodePort
+    - security risk
+    - opens port on each Worker Node
+        - multiple entry points into the cluster
+    - use LoadBalancer (will use the cloud providers load balancer) type or Ingress
+    ```
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+    name: frontend
+    spec:
+    type: ClusterIP
+    selector:
+        app: frontend
+    ports:
+    - name: http
+        port: 80
+        targetPort: 8080
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+    name: frontend-external
+    spec:
+    type: LoadBalancer
+    selector:
+        app: frontend
+    ports:
+    - name: http
+        port: 80
+        targetPort: 8080
+    ```
+7. Configure More Than 1 Replica for Deployment
+    - if 1 pod crashes, the application is not accessible until new pod restarts
+    - with more replicas, the application is always available
+    ```
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+        name: emailservice
+    spec:
+        replicas: 2
+    ```
+8. Other best practices
+    - use more than one worker node for your cluster
+        - each replica should run on a different node
+    - use labels for your K8s resources
+    - use namespaces to isolate resources
+    - 3 security best practices
+        - ensure images are free of vulnerabilities
+        - no root access for containers
+        - update kubernetes to the latest version
